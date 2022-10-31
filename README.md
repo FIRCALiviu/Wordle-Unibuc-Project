@@ -1,2 +1,2 @@
 # Wordle-Unibuc-Project
-The optimal solution for wordle, written in python for The University of Bucharest.
+The optimal solution for Wordle, written for a uni assignment @The University of Bucharest.
