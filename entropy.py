@@ -2,7 +2,6 @@ from data import data
 import math
 # import matplotlib.pyplot as plt
 
-g = open("output.txt", "w")
 
 
 def matches(guess, chosen):
@@ -45,7 +44,7 @@ def entropy(freq_list):
 
 
 def select():
-    global data,g
+    
     
     word_max = data[0]
     max_entropy = 0
@@ -55,15 +54,13 @@ def select():
         freq_list=[freq_dict[key][0]/len(data) for key in freq_dict]
         temp=entropy(freq_list)
         # g.write(" ".join([word+' ',str(temp)]) + "\n")
-        g.write(word + " " + str(temp) + "\n")
+      
         if max_entropy < temp:
             max_entropy = temp
             word_max = word
     return word_max
 
 
-print(select())
-g.close()
 
 # k = possible_matches("VIASE")
 # x = []
