@@ -1,8 +1,9 @@
 from data import data
 import math
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
-g = open("output.txt","w")
+g = open("output.txt", "w")
+
 
 def matches(guess, chosen):
     copy = list(chosen)
@@ -16,60 +17,61 @@ def matches(guess, chosen):
     for i in range(5):
         if guess[i] in copy :
             yellow[i] = 1
-            copy.remove(guess[i]) # value error
+            copy.remove(guess[i])  # value error
         else:
             gray[i] = 1
     
-    return str([ i + j*2 + k * 3 for i,j,k in zip(gray,yellow, green)])
+    return str([i + j*2 + k * 3 for i, j, k in zip(gray, yellow, green)])
 
-def Possible_matches(word_check):
+
+def possible_matches(word_check):
     global data
     freq_dict = dict()
     for word in data:
-        combination=matches(word_check, word)
+        combination = matches(word_check, word)
         if combination in freq_dict:
-            freq_dict[combination][0]+=1
+            freq_dict[combination][0] += 1
             freq_dict[combination][1].append(word)
         else:
-            freq_dict[combination]=[1,[word]]
+            freq_dict[combination] = [1, [word]]
     return freq_dict
 
 
-def Entropy(freq_list):
-    S=0
+def entropy(freq_list):
+    s = 0
     for i in freq_list:
-        S+=-i*math.log2(i)
-    return S
+        s += -i*math.log2(i)
+    return s
 
 
-def Select():
+def select():
     global data,g
     
-    word_max=data[0]
-    max_entropy=0
+    word_max = data[0]
+    max_entropy = 0
     
     for word in data:
-        freq_dict=Possible_matches(word)
+        freq_dict=possible_matches(word)
         freq_list=[freq_dict[key][0]/len(data) for key in freq_dict]
-        temp=Entropy(freq_list)
-       # g.write(" ".join([word+' ',str(temp)]) + "\n")
+        temp=entropy(freq_list)
+        # g.write(" ".join([word+' ',str(temp)]) + "\n")
         g.write(word + " " + str(temp) + "\n")
-        if max_entropy<temp:
+        if max_entropy < temp:
             max_entropy = temp
-            word_max=word
+            word_max = word
     return word_max
-    
 
-print(Select())
+
+print(select())
 g.close()
 
-#k=Possible_matches("VIASE")
-#x=[]
-#y=[]
-#for key in k:
-#    x.append(k[key][0])
+# k = possible_matches("VIASE")
+# x = []
+# y = []
+# for key in k:
+#     x.append(k[key][0])
 # #    
-#x.sort()
-#plt.scatter(x,y)
-#plt.show()
-#print(Possible_matches("VIASE"),sep='\n')
+# x.sort()
+# plt.scatter(x,y)
+# plt.show()
+# print(possible_matches("VIASE"), sep='\n')
