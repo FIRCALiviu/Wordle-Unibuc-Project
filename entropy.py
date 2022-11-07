@@ -11,16 +11,17 @@ def matches(guess, chosen):
     gray = [0, 0, 0, 0, 0]
     for i in range(5):
         if guess[i] == chosen[i]:
-            green[i] = 1
+            green[i] = 3
             copy.remove(guess[i])
     for i in range(5):
-        if guess[i] in copy :
-            yellow[i] = 1
-            copy.remove(guess[i])  
-        else:
-            gray[i] = 1 # value error
+        if not green[i]: 
+            if guess[i] in copy :
+                yellow[i] = 2
+                copy.remove(guess[i])  
+            else:
+                gray[i]=1
     
-    return str([i + j*2 + k * 3 for i, j, k in zip(gray, yellow, green)])
+    return str([i + j + k for i, j, k in zip(gray, yellow, green)])
 
 
 def possible_matches(word_check):
