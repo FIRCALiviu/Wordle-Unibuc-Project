@@ -16,9 +16,9 @@ def matches(guess, chosen):
     for i in range(5):
         if guess[i] in copy :
             yellow[i] = 1
-            copy.remove(guess[i])  # value error
+            copy.remove(guess[i])  
         else:
-            gray[i] = 1
+            gray[i] = 1 # value error
     
     return str([i + j*2 + k * 3 for i, j, k in zip(gray, yellow, green)])
 
