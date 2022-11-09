@@ -1,8 +1,19 @@
 from data import data
+import socket
 import math
 # import matplotlib.pyplot as plt
 
 
+def client():
+    host = socket.gethostname()
+    port = 8080
+
+    s = socket.socket()
+    s.connect((host,port))
+
+    s.send("TARIE")
+    data = s.recv(1024)
+    s.close()
 
 def matches(guess, chosen):
     copy = list(chosen)
@@ -45,8 +56,6 @@ def entropy(freq_list):
 
 
 def select():
-    
-    
     word_max = data[0]
     max_entropy = 0
     
@@ -55,13 +64,12 @@ def select():
         freq_list=[freq_dict[key][0]/len(data) for key in freq_dict]
         temp=entropy(freq_list)
         # g.write(" ".join([word+' ',str(temp)]) + "\n")
-      
+    
         if max_entropy < temp:
             max_entropy = temp
             word_max = word
-    return word_max
 
-
+client()
 
 # k = possible_matches("VIASE")
 # x = []
