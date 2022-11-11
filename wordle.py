@@ -1,20 +1,21 @@
-from data import data
-from entropy import matches
+from data import data,possibilities
+from SolvingAgent import matches
 import random
 import multiprocessing
-from entropy import test
+from multiprocessing import Process,Queue
+from SolvingAgent import select
 
-print("welcome to wordle, 1 means gray (the letter isn't in the word you should guess)")
-print("2 means yellow (the letter is in the word you should guess but not at the right position and 3 means yellow but it is at the right position)")
-print("enter \"quit\" to stop the gui")
+
+
 
 def choose_word():
     word = random.choice(data)
     return word
 
 
-def get_user_input(chosen):
-    word = input()
+def get_user_input(chosen,q):
+    word = guess.upper()
+    
     if word not in data:
         if(word =="QUIT"):
             print("thanks for playing")
@@ -24,23 +25,39 @@ def get_user_input(chosen):
         return
     res = matches(word, chosen)
     if "1" in res or "2" in res:
+        q.put(res)
         print(res)
-        get_user_input(chosen)
+        get_user_input(chosen,q)
         return
 
     print("Got it!")
     play_again = input("Want play again? Respond with y for yes and n for no: ")
     if play_again == "y":
         chosen = choose_word()
-        get_user_input(chosen)
+        get_user_input(chosen,q)
     else:
         print("Thank you for playing!")
 
+print("welcome to wordle, 1 means gray (the letter isn't in the word you should guess)")
+print("2 means yellow (the letter is in the word you should guess but not at the right position and 3 means yellow but it is at the right position)")
+print("enter \"quit\" to stop the gui, or \"solver\" if you want the game to be solved automatically")
+
+
+
 chosen = choose_word()
-
-p1 = multiprocessing.Process(target=get_user_input(chosen))
-p2 = multiprocessing.Process(target=test())
+guess=""
 
 
+if __name__=='__main__':
+    queue = Queue()
+    p2 = Process(target=select, args=(possibilities,queue,))
+    p1 = Process(target=get_user_input, args=(chosen,queue,))
+    p2.start()
+    p2.join()
+    guess = queue.get()
+    p1.start()
+    p1.join()
 
-#get_user_input(chosen)
+
+#select:
+#possibilities=freq_dict[res]
