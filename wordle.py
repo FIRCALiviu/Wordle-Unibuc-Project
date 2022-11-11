@@ -1,7 +1,12 @@
 from data import data
 from entropy import matches
 import random
+import multiprocessing
+from entropy import test
 
+print("welcome to wordle, 1 means gray (the letter isn't in the word you should guess)")
+print("2 means yellow (the letter is in the word you should guess but not at the right position and 3 means yellow but it is at the right position)")
+print("enter \"quit\" to stop the gui")
 
 def choose_word():
     word = random.choice(data)
@@ -9,8 +14,7 @@ def choose_word():
 
 
 def get_user_input(chosen):
-    word = input("Word = ").upper()
-    
+    word = input()
     if word not in data:
         if(word =="QUIT"):
             print("thanks for playing")
@@ -32,9 +36,11 @@ def get_user_input(chosen):
     else:
         print("Thank you for playing!")
 
-print("welcome to wordle, 1 means gray (the letter isn't in the word you should guess)")
-print("2 means yellow (the letter is in the word you should guess but not at the right position and 3 means yellow but it is at the right position)")
-print("enter \"quit\" to stop the gui")
-
 chosen = choose_word()
-get_user_input(chosen)
+
+p1 = multiprocessing.Process(target=get_user_input(chosen))
+p2 = multiprocessing.Process(target=test())
+
+
+
+#get_user_input(chosen)

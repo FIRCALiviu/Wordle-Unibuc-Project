@@ -61,7 +61,8 @@ def select():
             word_max = word
     return word_max
 
-
+def test():
+    return "TAREI"
 
 # k = possible_matches("VIASE")
 # x = []
