@@ -1,4 +1,4 @@
-from data import data,possibilities
+from data import possibilities
 from SolvingAgent import matches
 import random
 import multiprocessing
@@ -7,21 +7,22 @@ from SolvingAgent import select
 
 
 
-
 def choose_word():
-    word = random.choice(data)
+    word = random.choice(possibilities)
     return word
 
-
+# guess are valoarea TAREI initial dar
+# cand intra in functia get_user_input isi pierde valoarea si 
+# devine vid, de aceea word devine vid si loopeaza incontinuu pe NOt in word list
 def get_user_input(chosen,q):
     word = guess.upper()
     
-    if word not in data:
+    if word not in possibilities:
         if(word =="QUIT"):
             print("thanks for playing")
             return
         print("Not in word list")
-        get_user_input(chosen)
+        get_user_input(chosen,q)
         return
     res = matches(word, chosen)
     if "1" in res or "2" in res:
@@ -45,8 +46,7 @@ print("enter \"quit\" to stop the gui, or \"solver\" if you want the game to be 
 
 
 chosen = choose_word()
-guess=""
-
+guess = ""
 
 if __name__=='__main__':
     queue = Queue()

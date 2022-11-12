@@ -23,10 +23,9 @@ def matches(guess, chosen):
     
     return str([i + j + k for i, j, k in zip(gray, yellow, green)])
 
-
+freq_dict = dict()
 def possible_matches(word_check):
-
-    freq_dict = dict()
+    global freq_dict
     for word in possibilities:
         combination = matches(word_check, word)
         if combination in freq_dict:
@@ -46,7 +45,16 @@ def entropy(freq_list):
 ok=True
 def select(possibilities,q):
     global ok
-    if ok == 0:
+    if ok:
+        guess = "TAREI"
+        q.put(guess)
+        print(guess)
+        ok=False
+    else:
+        possible_matches(guess)
+        res = q.get()
+        print(res)
+        updatePossibilities(res)
         word_max = possibilities[0]
         max_entropy = 0
         
@@ -59,13 +67,6 @@ def select(possibilities,q):
             if max_entropy < temp:
                 max_entropy = temp
                 word_max = word
-
-   
-    if ok:
-        q.put("TAREI")
-        print("TAREI")
-        ok=False
-    else:
         q.put(word_max)
         print("word_max")
 
@@ -85,8 +86,10 @@ def entropie2():
             word_max = word
     return word_max
 
-def updatePossibilities():
-    pass
+def updatePossibilities(res):
+    possibilities = freq_dict[res]
+    print(possibilities)
+
 
 #print(entropie2())
 # k = possible_matches("VIASE")

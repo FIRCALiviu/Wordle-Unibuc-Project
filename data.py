@@ -1,4 +1,4 @@
-data=["ABACA",
+possibilities=["ABACA",
 "ABACE",
 "ABALE",
 "ABATA",
