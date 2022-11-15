@@ -69,22 +69,7 @@ def select(possibilities,q):
                 word_max = word
         q.put(word_max)
         print("word_max")
-
-
-def entropie2():
-    word_max = possibilities[0]
-    max_entropy = 0
-    
-    for word in possibilities:
-        freq_dict=possible_matches(word)
-        freq_list=[freq_dict[key][0]/len(possibilities) for key in freq_dict]
-        temp=entropy(freq_list)
-        # g.write(" ".join([word+' ',str(temp)]) + "\n")
-    
-        if max_entropy < temp:
-            max_entropy = temp
-            word_max = word
-    return word_max
+        
 
 def updatePossibilities(res):
     possibilities = freq_dict[res]
