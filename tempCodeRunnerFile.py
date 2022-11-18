@@ -1,1 +1,0 @@
-str(p2.start()).upper()
