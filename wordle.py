@@ -1,56 +1,131 @@
-from data import data,possibilities
-from SolvingAgent import matches,select,updatePossibilities
-from random import choice
-from multiprocessing import Process,Queue
+from data import first_dict,possibilities
+import random
+from multiprocessing import Queue
+import math
+from functools import lru_cache
+
 running=True
 
 def choose_word():
-    word = choice(data)
+    word = random.choice(possibilities)
     return word
 
+#we cache the function so the result is O(1)
+@lru_cache
+def gen_dict():
+    aux=dict()
+    #we could use modulo to avoid using 5 variables, but C style loops are more efficient
+    for i in range(1,4):
+        for j in range(1,4):
+            for k in range(1,4):
+                for l in range(1,4):
+                    for m in range(1,4):
+                        aux[str([i,j,k,l,m])]=[0,[]]          
+    return aux
+print(gen_dict())
+def get_input(chosen,q):
+    global running
 
-def get_user_input(chosen,q):
-    word = q.get().upper()
+    print('getuser')
     
+    
+    word = q.get()
 
     res = matches(word, chosen)
+    
     if "1" in res or "2" in res:
-        print(res)
         q.put(res)
-        return
-
-    print("Got it!")
-    play_again = input("Want to play again? Respond with y for yes and n for no: ")
-    if play_again == "y":
-        chosen = choose_word()
-        possibiliies=data
-        get_user_input(chosen)
-    else:
-        global runnig
-        runnig=False
-
-#print("welcome to wordle, 1 means gray (the letter isn't in the word you should guess)")
-#print("2 means yellow (the letter is in the word you should guess but not at the right position and 3 means yellow but it is at the right position)")
-#print("enter \"quit\" to stop the gui")
-
-chosen = choose_word()
-
-
-if __name__=="__main__":
-    q=Queue()
-    information=None
-    chosenDict=None
-    p1=Process(target=select,args=(q,))
-    p2=Process(target=get_user_input, args=(chosen,))
-    p3=Process(target=updatePossibilities,args=(information,chosenDict,))
-    while running:
-        p1.start()
-        p1.join()
-        p2.start()
-        p2.join()
-       
-        chosenDict=q.get()
-        information=q.get()
-        p3.start()
-        p3.join()
+        print(res)
         
+    else:
+        print("Got it!")
+        running=False
+       
+        
+
+def matches(guess, chosen):
+   
+    output=[False for i in range(5)]
+    for i in range(5):
+        if guess[i] == chosen[i]:
+            output[i] = 3
+            
+    for i in range(5):
+        if not output[i]: 
+            if guess[i] in chosen:    
+                output[i] = 2
+            else:
+                output[i]=1
+    
+    return str(output)
+
+
+
+def possible_matches(word_check):
+    freq_dict=gen_dict()
+    for word in possibilities:
+        combination = matches(word_check, word)
+        
+        freq_dict[combination][0] += 1
+        freq_dict[combination][1].append(word)
+        
+    aux={i:j for i,j in freq_dict.items() if freq_dict[i][0]}
+    return aux
+
+def entropy(freq_list):
+    s = 0
+    for i in freq_list:
+        s += -i*math.log2(i)
+    return s
+
+
+FirstTime=True
+def select(q):
+    global FirstTime
+
+    print('select')
+    
+    if FirstTime:
+        print('first time')
+        q.put("TAREI")
+        q.put(first_dict)
+        print("TAREI")
+        FirstTime=False
+        
+    else:
+        print('not first time')
+        word_max = possibilities[0]
+        max_entropy = 0
+        max_dict={}
+        for word in possibilities:
+            freq_dict=possible_matches(word)
+            freq_list=[freq_dict[key][0]/len(possibilities) for key in freq_dict]
+            temp=entropy(freq_list)
+        
+            if max_entropy < temp:
+                max_entropy = temp
+                word_max = word
+                max_dict=freq_dict
+        q.put(word_max)
+        q.put(max_dict)
+        print(word_max)
+                    
+
+def updatePossibilities(freq_dict,information):
+    return freq_dict[information][1]
+    #print(possibilities)
+
+if __name__=='__main__':
+    #queue = Queue() print("Got it!")
+    q = Queue()
+    chosen = choose_word()
+   
+    while running:
+        select(q)
+        get_input(chosen,q)
+        if running:
+            dictionar=q.get(timeout=3)
+            information=q.get(timeout=3)
+            possibilities=updatePossibilities(dictionar,information)
+        else : break
+        print("executed a loop")
