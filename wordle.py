@@ -2,7 +2,7 @@ from data import first_dict,possibilities
 import random
 from multiprocessing import Queue
 import math
-from functools import lru_cache
+
 
 running=True
 
@@ -10,8 +10,8 @@ def choose_word():
     word = random.choice(possibilities)
     return word
 
-#we cache the function so the result is O(1)
-@lru_cache
+
+
 def gen_dict():
     aux=dict()
     #we could use modulo to avoid using 5 variables, but C style loops are more efficient
