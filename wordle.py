@@ -22,11 +22,12 @@ def gen_dict():
                     for m in range(1,4):
                         aux[str([i,j,k,l,m])]=[0,[]]          
     return aux
-print(gen_dict())
+    
+#print(gen_dict())
 def get_input(chosen,q):
     global running
 
-    print('getuser')
+    #print('getuser')
     
     
     word = q.get()
@@ -83,17 +84,17 @@ FirstTime=True
 def select(q):
     global FirstTime
 
-    print('select')
+    #print('select')
     
     if FirstTime:
-        print('first time')
+        #print('first time')
         q.put("TAREI")
         q.put(first_dict)
         print("TAREI")
         FirstTime=False
         
     else:
-        print('not first time')
+        #print('not first time')
         word_max = possibilities[0]
         max_entropy = 0
         max_dict={}
@@ -128,4 +129,4 @@ if __name__=='__main__':
             information=q.get(timeout=3)
             possibilities=updatePossibilities(dictionar,information)
         else : break
-        print("executed a loop")
+        #print("executed a loop")
