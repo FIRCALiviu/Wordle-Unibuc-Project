@@ -56,6 +56,9 @@ def entropy(freq_list):
         s += -i*math.log2(i)
     return s
 
+def updatePossibilities(freq_dict,information):
+    return freq_dict[information][1]
+
 def get_input(chosen,running,turn,q):
     while running.value:
         while turn.value == True:
@@ -63,15 +66,15 @@ def get_input(chosen,running,turn,q):
         
         word = q.get()
 
-        res = matches(word, chosen)
+        res = matches(word[0], chosen)
         
         if "1" in res or "2" in res:
-            q.put(res)
+            q.put([res,word[1]])
             print(res)
-            
         else:
             print("Got it!")
             running.value = False
+            return
         turn.value = True
 
 FirstTime=True
@@ -81,16 +84,18 @@ def select(running,turn,q):
         while turn.value == False:
             pass
         if FirstTime:
-            q.put("TAREI")
+            #q.put("TAREI")
             #q.put(first_dict)
+            q.put(["TAREI",first_dict])
             print("TAREI")
             FirstTime=False
-            
         else:
-            res = q.get()
-            possibilities = updatePossibilities(first_dict,res)
-            print(res)
-            print(possibilities)
+            #dictionar = q.get()
+            #information = q.get()
+            info = q.get()
+            #print(information)
+            possibilities = updatePossibilities(info[1],info[0])
+            #print(possibilities)
             word_max = possibilities[0]
             max_entropy = 0
             max_dict={}
@@ -103,14 +108,12 @@ def select(running,turn,q):
                     max_entropy = temp
                     word_max = word
                     max_dict=freq_dict
-            q.put(word_max)
+            #q.put(word_max)
+            #q.put(max_dict)
+            q.put([word_max,max_dict])
             print(word_max)
-            possibilities = updatePossibilities(max_dict,res)
         turn.value = False
-                    
-
-def updatePossibilities(freq_dict,information):
-    return freq_dict[information][1]
+                
 
 if __name__=='__main__':
     q = Queue()
