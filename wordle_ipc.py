@@ -1,10 +1,8 @@
 from data import first_dict,possibilities
 import random
-from multiprocessing import Process,Queue
+from multiprocessing import Process,Queue, Value
 import math
 
-running = True
-turn = True
 
 def choose_word():
     word = random.choice(possibilities)
@@ -23,29 +21,6 @@ def gen_dict():
     return aux
     
 #print(gen_dict())
-def get_input(chosen,q):
-    global running
-    global turn
-    while running:
-        while turn == True:
-            pass
-        
-        word = q.get()
-
-        res = matches(word, chosen)
-        
-        if "1" in res or "2" in res:
-            q.put(res)
-            print(res)
-            
-        else:
-            print("Got it!")
-            running = False
-        turn = True
-        return
-        
-        
-
 def matches(guess, chosen):
    
     output=[False for i in range(5)]
@@ -81,23 +56,41 @@ def entropy(freq_list):
         s += -i*math.log2(i)
     return s
 
+def get_input(chosen,running,turn,q):
+    while running.value:
+        while turn.value == True:
+            pass
+        
+        word = q.get()
+
+        res = matches(word, chosen)
+        
+        if "1" in res or "2" in res:
+            q.put(res)
+            print(res)
+            
+        else:
+            print("Got it!")
+            running.value = False
+        turn.value = True
 
 FirstTime=True
-def select(q):
-    global running
+def select(running,turn,q):
     global FirstTime
-    global turn
-    while running:
-        while turn == False:
+    while running.value:
+        while turn.value == False:
             pass
-
         if FirstTime:
             q.put("TAREI")
-            q.put(first_dict)
+            #q.put(first_dict)
             print("TAREI")
             FirstTime=False
             
         else:
+            res = q.get()
+            possibilities = updatePossibilities(first_dict,res)
+            print(res)
+            print(possibilities)
             word_max = possibilities[0]
             max_entropy = 0
             max_dict={}
@@ -111,10 +104,9 @@ def select(q):
                     word_max = word
                     max_dict=freq_dict
             q.put(word_max)
-            q.put(max_dict)
             print(word_max)
-        turn = False
-        return
+            possibilities = updatePossibilities(max_dict,res)
+        turn.value = False
                     
 
 def updatePossibilities(freq_dict,information):
@@ -123,9 +115,12 @@ def updatePossibilities(freq_dict,information):
 if __name__=='__main__':
     q = Queue()
     chosen = choose_word()
-   
-    p2 = Process(target=select, args=(q,))
-    p1 = Process(target=get_input, args=(chosen,q,))
+    
+    turn = Value('b',True)
+    running = Value('b',True)
+
+    p2 = Process(target=select, args=(running,turn,q,))
+    p1 = Process(target=get_input, args=(chosen,running,turn,q,))
 
     p2.start()
     p1.start()
