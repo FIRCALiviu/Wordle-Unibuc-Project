@@ -3,13 +3,10 @@ import random
 from multiprocessing import Queue
 import math
 
-
 running=True
-
 def choose_word():
     word = random.choice(possibilities)
     return word
-
 
 
 def gen_dict():
@@ -39,8 +36,7 @@ def get_input(chosen,q):
 
         running=False
        
-        
-
+    
 def matches(guess, chosen):
    
     output=[False for i in range(5)]
@@ -110,7 +106,6 @@ def select(q):
 
 def updatePossibilities(freq_dict,information):
     return freq_dict[information][1]
-    #print(possibilities)
 
 
 if __name__=="__main__":

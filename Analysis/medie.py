@@ -1,4 +1,4 @@
-f = open("solutions.txt","r")
+f = open("Analysis/solutions.txt","r")
 
 m = 0
 for line in f:
@@ -6,4 +6,4 @@ for line in f:
 
 m/=11454
 
-print(m)
+print(round(m,2))
