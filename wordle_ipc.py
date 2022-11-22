@@ -1,6 +1,6 @@
 from data import first_dict,possibilities
 import random
-from multiprocessing import Process,Queue, Value
+from multiprocessing import Process,Queue,Value,Array
 import math
 
 
@@ -39,7 +39,7 @@ def matches(guess, chosen):
 
 
 
-def possible_matches(word_check):
+def possible_matches(word_check,possibilities):
     freq_dict=gen_dict()
     for word in possibilities:
         combination = matches(word_check, word)
@@ -67,9 +67,9 @@ def get_input(chosen,running,turn,q):
         word = q.get()
 
         res = matches(word[0], chosen)
-        
+        possibilities = updatePossibilities(word[1],res)
         if "1" in res or "2" in res:
-            q.put([res,word[1]])
+            q.put([res,possibilities])
             print(res)
         else:
             print("Got it!")
@@ -82,37 +82,31 @@ def select(running,turn,q):
     global FirstTime
     while running.value:
         while turn.value == False:
-            pass
+            if running.value == False:
+                return
         if FirstTime:
-            #q.put("TAREI")
-            #q.put(first_dict)
             q.put(["TAREI",first_dict])
             print("TAREI")
             FirstTime=False
         else:
-            #dictionar = q.get()
-            #information = q.get()
             info = q.get()
-            #print(information)
-            possibilities = updatePossibilities(info[1],info[0])
-            #print(possibilities)
+            possibilities = info[1]
             word_max = possibilities[0]
             max_entropy = 0
             max_dict={}
             for word in possibilities:
-                freq_dict=possible_matches(word)
+                freq_dict=possible_matches(word,possibilities)
                 freq_list=[freq_dict[key][0]/len(possibilities) for key in freq_dict]
                 temp=entropy(freq_list)
             
-                if max_entropy < temp:
+                if max_entropy <= temp:
                     max_entropy = temp
                     word_max = word
                     max_dict=freq_dict
-            #q.put(word_max)
-            #q.put(max_dict)
             q.put([word_max,max_dict])
             print(word_max)
         turn.value = False
+    return
                 
 
 if __name__=='__main__':
