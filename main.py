@@ -16,7 +16,7 @@ def get_user_input(chosen):
     if "1" in res or "2" in res:
         for i in [1,4,7,10,13]:
             if res[i] == '1':
-                print(colored(word[i//3],'grey'),end="")
+                print(colored(word[i//3],'red'),end="")
             if res[i] == '2':
                 print(colored(word[i//3],'yellow'),end="")
             if res[i] == '3':
@@ -32,8 +32,9 @@ def get_user_input(chosen):
     else:
         print("Thank you for playing!")
 
-print("welcome to wordle, if you want to play type y, else if you would like to let the computer to solve the puzzle type anything")
+print("welcome to wordle, if you want to play type y, else if you would like to let the computer solve the puzzle type anything else")
 print("enter \"quit\" to stop the gui")
+
 
 def wordle():
     chosen = choose_word()

@@ -1,6 +1,6 @@
 from data import first_dict,possibilities
 import random
-from multiprocessing import Process,Queue,Value,Array
+from multiprocessing import Process,Queue,Value
 import math
 
 def choose_word():
@@ -56,7 +56,7 @@ def updatePossibilities(freq_dict,information):
 
 def get_input(chosen,running,turn,q):
     while running.value:
-        while turn.value == True:
+        while turn.value :
             pass
         
         word = q.get()
@@ -76,8 +76,8 @@ FirstTime=True
 def select(running,turn,q):
     global FirstTime
     while running.value:
-        while turn.value == False:
-            if running.value == False:
+        while turn.value is False:
+            if running.value is False:
                 return
         if FirstTime:
             q.put(["TAREI",first_dict])
