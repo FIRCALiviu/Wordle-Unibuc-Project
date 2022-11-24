@@ -1,7 +1,7 @@
 from data import data
 from wordle import matches,choose_word
 import os
-from termcolor import colored,cprint
+from termcolor import colored
 
 def get_user_input(chosen):
     word = input("Word: ").upper()
