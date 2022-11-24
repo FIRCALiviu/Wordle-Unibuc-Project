@@ -3,12 +3,9 @@ import random
 from multiprocessing import Process,Queue,Value,Array
 import math
 
-
 def choose_word():
     word = random.choice(possibilities)
     return word
-
-
 
 def gen_dict():
     aux=dict()
@@ -36,8 +33,6 @@ def matches(guess, chosen):
                 output[i]=1
     
     return str(output)
-
-
 
 def possible_matches(word_check,possibilities):
     freq_dict=gen_dict()
