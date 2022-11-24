@@ -10,7 +10,24 @@ def choose_word():
     word = random.choice(possibilities)
     return word
 
+def get_user_input(chosen, nr):
+    word = input("Word = ")
+    res = matches(word, chosen)
 
+    userFeedback = []
+    for r in res:
+        if r == "1":
+            userFeedback.append("GREY")
+        elif r == "2":
+            userFeedback.append("YELLOW")
+        elif r == "3":
+            userFeedback.append("GREEN")
+    if ("GREY" in userFeedback) or ("YELLOW" in userFeedback):
+        print(*userFeedback)
+        print("Try again:")
+        get_user_input(chosen, nr+1)
+    else:
+        print(f"Got it in {nr+1} tries! Thank you for playing")
 
 def gen_dict():
     aux=dict()
@@ -110,7 +127,7 @@ def select(q):
         q.put(word_max)
         q.put(max_dict)
         print(word_max)
-                    
+
 
 def updatePossibilities(freq_dict,information):
     return freq_dict[information][1]
@@ -120,13 +137,17 @@ if __name__=='__main__':
     #queue = Queue() print("Got it!")
     q = Queue()
     chosen = choose_word()
-   
-    while running:
-        select(q)
-        get_input(chosen,q)
-        if running:
-            dictionar=q.get(timeout=3)
-            information=q.get(timeout=3)
-            possibilities=updatePossibilities(dictionar,information)
-        else : break
-        #print("executed a loop")
+    user_response = input("Do you want to play by yourself? Please enter Y if so")
+    if user_response == "Y":
+        word_chosen = choose_word()
+        get_user_input(word_chosen, 0)
+    else:
+        while running:
+            select(q)
+            get_input(chosen,q)
+            if running:
+                dictionar=q.get(timeout=3)
+                information=q.get(timeout=3)
+                possibilities=updatePossibilities(dictionar,information)
+            else : break
+            #print("executed a loop")
