@@ -27,4 +27,4 @@ The conventions used are the following:
 The analysis folder contains :
 - line by line the word to guess and then all the guesses the bot did in solutions.txt
 - the generator for the file
-- averedge, which produced the averedge score of the bot
+- average, which produced the average score of the bot
