@@ -7,10 +7,10 @@ Dependencies for the project:
 - python's 3.11 core library
 
 Written by :
-Tirila Patric-Gabriel
-Alexandru Andrei
-Mincu Adrian-Lucian
-Firca Liviu Nicolae
+- Tirila Patric-Gabriel
+- Alexandru Andrei
+- Mincu Adrian-Lucian
+- Firca Liviu Nicolae
 
 
 
@@ -20,7 +20,7 @@ The conventions used are the following:
 - Green means Yellow but it is at the right spot
 
 
--When runnig the bot, 1 means Red, 2 means Yellow, 3 means Green
+- When runnig the bot, 1 means Red, 2 means Yellow, 3 means Green
 
 ! This is the buggy behaviour version of wordle, meaning that if the letter x is in the word to guess, all letter x will be colored at least yellow!
 
