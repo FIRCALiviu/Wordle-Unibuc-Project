@@ -1,7 +1,7 @@
 # Wordle-Unibuc-Project
 The optimal solution for Wordle, written for a uni assignment @The University of Bucharest. Courtesy to 3b1b for explaining us the entropy "algorithm" used in project in his video https://youtu.be/v68zYyaEmEA. We got our 11 thousand words from https://cs.unibuc.ro/~crusu/asc/cuvinte_wordle.txt and they are in Romanian.
 This project includes a bot for wordle which will guess the word automatically in ~ 4,37 guesses.
-
+Please check out a previous version of this branch with a SHA of 0a32f655a66c623f31ad77f7ee34e3753f923f23, this one has critical bugs.
 Dependencies for the project:
 - termcolor 2.1.1
 - python's 3.11 core library
