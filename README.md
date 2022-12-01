@@ -5,6 +5,7 @@ Please check out a previous version of this branch with a SHA of 0a32f655a66c623
 Dependencies for the project:
 - termcolor 2.1.1
 - python's 3.11 core library
+- cprint
 
 Written by :
 - Tirila Patric-Gabriel
